@@ -1,0 +1,174 @@
+[gd_scene load_steps=23 format=3 uid="uid://cm2tjtu1l1rcl"]
+
+[ext_resource type="Script" uid="uid://bdlh0kbr1fg3t" path="res://world.gd" id="1_dwbse"]
+[ext_resource type="Script" uid="uid://dins75xsw76bh" path="res://ship.gd" id="1_tlwt5"]
+[ext_resource type="Texture2D" uid="uid://gjgdn16dm8hi" path="res://greyearth_tx.png" id="2_036b0"]
+[ext_resource type="Script" uid="uid://coqu30lnh611h" path="res://player.gd" id="4_pkg7o"]
+[ext_resource type="Script" uid="uid://c76rir56wj652" path="res://camera.gd" id="5_dwbse"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_dwbse"]
+size = Vector3(2, 0.8, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_036b0"]
+size = Vector3(0.4, 0.4, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pkg7o"]
+size = Vector3(4, 0.2, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gbfbk"]
+radial_segments = 8
+rings = 0
+
+[sub_resource type="SphereMesh" id="SphereMesh_036b0"]
+radius = 0.6
+height = 1.2
+radial_segments = 8
+rings = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fj7yv"]
+size = Vector3(3, 1, 4)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mtr83"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pkg7o"]
+albedo_color = Color(0.888529, 0.575651, 0.252178, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1odxm"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mtr83"]
+radius = 50.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a75xc"]
+albedo_texture = ExtResource("2_036b0")
+roughness_texture = ExtResource("2_036b0")
+
+[sub_resource type="SphereMesh" id="SphereMesh_a75xc"]
+radius = 50.0
+height = 100.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_f3sb7"]
+radius = 5.0
+height = 10.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_fj7yv"]
+radius = 5.0
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_036b0"]
+
+[sub_resource type="Sky" id="Sky_dwbse"]
+sky_material = SubResource("PanoramaSkyMaterial_036b0")
+
+[sub_resource type="Environment" id="Environment_pkg7o"]
+background_mode = 2
+sky = SubResource("Sky_dwbse")
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_dwbse")
+
+[node name="Ship" type="CharacterBody3D" parent="."]
+script = ExtResource("1_tlwt5")
+
+[node name="model" type="Node3D" parent="Ship"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.880674)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ship/model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0370095)
+mesh = SubResource("BoxMesh_dwbse")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Ship/model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0686131, -1.76518)
+mesh = SubResource("BoxMesh_036b0")
+skeleton = NodePath("../MeshInstance3D")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Ship/model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.880674)
+mesh = SubResource("BoxMesh_pkg7o")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Ship/model"]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, -0.8, 0, 0.880674)
+mesh = SubResource("CylinderMesh_gbfbk")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D5" type="MeshInstance3D" parent="Ship/model"]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0.865, 0, 0.880674)
+mesh = SubResource("CylinderMesh_gbfbk")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="Ship/model"]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0.403305, 0.4)
+mesh = SubResource("SphereMesh_036b0")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ship"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.880674)
+shape = SubResource("BoxShape3D_fj7yv")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+script = ExtResource("4_pkg7o")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_mtr83")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+material_override = SubResource("StandardMaterial3D_pkg7o")
+mesh = SubResource("CapsuleMesh_1odxm")
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("5_dwbse")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 10)
+
+[node name="env" type="Node3D" parent="."]
+
+[node name="Planet" type="Node3D" parent="env"]
+
+[node name="PlanetBody" type="StaticBody3D" parent="env/Planet"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.71796, -64.7308, 1.55607)
+
+[node name="PlanetCollider" type="CollisionShape3D" parent="env/Planet/PlanetBody"]
+shape = SubResource("SphereShape3D_mtr83")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="env/Planet/PlanetBody"]
+material_override = SubResource("StandardMaterial3D_a75xc")
+mesh = SubResource("SphereMesh_a75xc")
+skeleton = NodePath("../PlanetCollider")
+
+[node name="moon1" type="MeshInstance3D" parent="env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 139.116, -36.367, -14.8929)
+mesh = SubResource("SphereMesh_f3sb7")
+skeleton = NodePath("../..")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="env/moon1"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="env/moon1/StaticBody3D"]
+shape = SubResource("SphereShape3D_fj7yv")
+
+[node name="moon2" type="MeshInstance3D" parent="env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -81.4102, 0, -29.7858)
+mesh = SubResource("SphereMesh_f3sb7")
+skeleton = NodePath("../moon1")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="env/moon2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="env/moon2/StaticBody3D"]
+shape = SubResource("SphereShape3D_fj7yv")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.9364, 68.4806)
+light_color = Color(1, 1, 0.768627, 1)
+omni_range = 100.0
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 47.9908, 0)
+light_color = Color(0.687085, 0.791632, 0.992571, 1)
+sky_mode = 1
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="env"]
+transform = Transform3D(-0.000737548, -0.926958, 0.375165, 0.730351, 0.255765, 0.633381, -0.683072, 0.274469, 0.676816, 0, 89.3996, 32.9103)
+light_color = Color(0.756136, 0.465125, 0.302458, 1)
+sky_mode = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="env/DirectionalLight3D"]
+environment = SubResource("Environment_pkg7o")

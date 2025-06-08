@@ -1,0 +1,84 @@
+[gd_scene load_steps=8 format=3 uid="uid://cjvht12nxfc15"]
+
+[ext_resource type="Texture2D" uid="uid://gjgdn16dm8hi" path="res://greyearth_tx.png" id="2_mtr83"]
+
+[sub_resource type="GDScript" id="GDScript_aqk2v"]
+script/source = "extends CharacterBody3D
+
+
+const SPEED = 5.0
+const JUMP_VELOCITY = 4.5
+
+@export var gravity_strength: float = 30.0
+@export var planet: Node3D  # Drag the planet node into this field
+
+
+func _physics_process(delta: float) -> void:
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+
+	# Handle jump.
+	if Input.is_action_just_pressed(\"ui_accept\") and is_on_floor():
+		velocity.y = JUMP_VELOCITY
+
+	# Get the input direction and handle the movement/deceleration.
+	# As good practice, you should replace UI actions with custom gameplay actions.
+	var input_dir := Input.get_vector(\"ui_left\", \"ui_right\", \"ui_up\", \"ui_down\")
+	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	if direction:
+		velocity.x = direction.x * SPEED
+		velocity.z = direction.z * SPEED
+	else:
+		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.z = move_toward(velocity.z, 0, SPEED)
+
+	move_and_slide()
+"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_mtr83"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1odxm"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mtr83"]
+radius = 50.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a75xc"]
+albedo_texture = ExtResource("2_mtr83")
+roughness_texture = ExtResource("2_mtr83")
+
+[sub_resource type="SphereMesh" id="SphereMesh_a75xc"]
+radius = 50.0
+height = 100.0
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 67.473, 0)
+script = SubResource("GDScript_aqk2v")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Player"]
+shape = SubResource("CapsuleShape3D_mtr83")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Player"]
+mesh = SubResource("CapsuleMesh_1odxm")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.691134, 3.74194)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("SphereShape3D_mtr83")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D"]
+material_override = SubResource("StandardMaterial3D_a75xc")
+mesh = SubResource("SphereMesh_a75xc")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 42.9364, 68.4806)
+light_color = Color(1, 1, 0.768627, 1)
+omni_range = 100.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.000737548, -0.926958, 0.375165, 0.730351, 0.255765, 0.633381, -0.683072, 0.274469, 0.676816, 0, 46.1759, 82.6485)
